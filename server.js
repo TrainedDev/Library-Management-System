@@ -66,7 +66,7 @@ app.get("/authors/:authorId/books", async (req, res) => {
         if (!id) return res.status(400).json("required details not found");
 
         const fetchBookByAuthor = await Book.findAll({ where: { authorId: id } });
-        res.status(200).json({ msg: "specific books successfully fetched", data: fetchBookByAuthor });
+        res.status(200).json({ msg: "specific books successfully fetched", Author: fetchBookByAuthor });
     } catch (error) {
         res.status(500).json({ msg: "failed to fetch book by author", Error: error.message })
     }
@@ -81,7 +81,7 @@ app.get("/genres/:genreId/books", async (req, res) => {
 
         const getBooks = await Genre.findAll({ where: { id: genreId }, include: Book });
 
-        res.status(200).json({ msg: "genres successfully fetched", data: getBooks });
+        res.status(200).json({ msg: "genres successfully fetched", Genres: getBooks });
     } catch (error) {
         res.status(500).json({ msg: "failed to fetch books by specific genre", Error: error.message })
     }
