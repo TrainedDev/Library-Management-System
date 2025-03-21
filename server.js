@@ -124,7 +124,7 @@ app.get("/genres/:genresId/authors", async (req, res) => {
 
         if (!genreId) return res.status(400).json("required details not found");
 
-        const fetchAuthors = await Genre.findAll({
+        const fetchAuthors = await Genre.findOne({
             where: { id: genreId }, include: {
                 model: Book,
                 attributes: ["title"],
