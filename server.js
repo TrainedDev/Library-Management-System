@@ -135,7 +135,15 @@ app.get("/genres/:genresId/authors", async (req, res) => {
             }
         });
 
-        res.status(200).json({ msg: "authors successfully fetched", Authors: fetchAuthors })
+        const data = fetchAuthors?.Books.map(ele => {
+            const filteredData = {
+                authorName: ele.Author.name,
+                bookTitle: ele.title,
+            }
+            return filteredData
+        })
+
+        res.status(200).json({ msg: "authors successfully fetched", Authors: data })
     } catch (error) {
         res.status(500).json({ msg: "failed to fetch authors", Error: error.message });
     }
