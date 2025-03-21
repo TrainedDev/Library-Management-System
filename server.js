@@ -102,6 +102,44 @@ app.post("/books", async (req, res) => {
     }
 });
 
+// add new author
+app.post("/author/new", async (req, res) => {
+    try {
+        const { name, birthdayDate, email } = req.body;
+
+        if (!name || !birthdayDate || !email) return res.status(400).json("required details not found");
+
+        const newAuthor = await Author.create(req.body);
+
+        res.status(201).json({ msg: "new author successfully added", Author: newAuthor });
+    } catch (error) {
+        res.status(500).json({ msg: "failed to add new author", Error: error.message });
+    }
+});
+
+// fetch author, book, by genre
+app.get("/genres/:genresId/authors", async (req, res) => {
+    try {
+        const genreId = parseInt(req.params.genresId);
+
+        if (!genreId) return res.status(400).json("required details not found");
+
+        const fetchAuthors = await Genre.findAll({
+            where: { id: genreId }, include: {
+                model: Book,
+                attributes: ["title"],
+                include: {
+                    model: Author,
+                    attributes: ["name"]
+                }
+            }
+        });
+
+        res.status(200).json({ msg: "authors successfully fetched", Authors: fetchAuthors })
+    } catch (error) {
+        res.status(500).json({ msg: "failed to fetch authors", Error: error.message });
+    }
+})
 app.get("/", (req, res) => res.send("server is live"));
 
 app.listen("3000", () => console.log("server is ready"));
